@@ -15,7 +15,7 @@ CC = gcc
 
 # Paths
 BINDIR = ./bin
-HEADERDIR = ./header
+HEADERDIR = ./source/header
 LIBDIR = ./source/lib
 LIBHEADERDIR = ./source/lib/header
 OBJDIR = ./bin/obj
@@ -30,7 +30,7 @@ OBJECTS = $(OBJDIR)/main.o
 
 # The main executable. Should be the first "target" to be the default one
 Watering: $(OBJECTS)
-	$(CC) -o $(BINDIR)/Watering $(OBJECTS) $(FLAGS)
+	$(CC) -o $(BINDIR)/watering.exe $(OBJECTS) $(FLAGS)
 
 # Targets and their recipes --------------------------------------------
 
@@ -41,4 +41,4 @@ $(OBJDIR)/main.o: $(SOURCEDIR)/main.c $(HEADERDIR)/main.h
 
 # Delete all binaries to force a full (re)compile of all source files next time
 clean:
-	rm $(BINDIR)/Watering $(OBJECTS)
+	rm $(BINDIR)/watering.exe $(OBJECTS)
