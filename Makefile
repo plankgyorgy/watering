@@ -26,7 +26,7 @@ FLAGS = -I$(HEADERDIR)
 LIBFLAGS = -I$(LIBHEADERDIR)
 
 # Set of object files for having the possibility to handle them together
-OBJECTS = $(OBJDIR)/main.o
+OBJECTS = $(OBJDIR)/main.o $(OBJDIR)/linkedlist.o
 
 # The main executable. Should be the first "target" to be the default one
 Watering: $(OBJECTS)
@@ -36,6 +36,9 @@ Watering: $(OBJECTS)
 
 $(OBJDIR)/main.o: $(SOURCEDIR)/main.c $(HEADERDIR)/main.h
 	$(CC) -c -o $(OBJDIR)/main.o $(SOURCEDIR)/main.c $(FLAGS)
+
+$(OBJDIR)/linkedlist.o: $(LIBDIR)/linkedlist.c $(LIBHEADERDIR)/linkedlist.h
+	$(CC) -c -o $(OBJDIR)/linkedlist.o $(LIBDIR)/linkedlist.c $(LIBFLAGS)
 
 # Recipes without file target ------------------------------------------
 
