@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "linkedlist.h"
@@ -9,11 +10,11 @@
 */
 linkedlist *LinkedList_CreateSized(int size)
 {
-    list *ret;
+    linkedlist *ret;
 
     if ((ret = malloc(sizeof(linkedlist))) != NULL)
     {
-        LinkedList_InitializeBySize(ret, size);
+        LinkedList_InitializeWithSize(ret, size);
     }
 
     return ret;
@@ -25,38 +26,40 @@ linkedlist *LinkedList_CreateSized(int size)
 * list: the address of list
 * data: the address of data to add to the list
 *
-* Returns the address of the new element
+* Returns true in case of success, otherwise false
 */
-linkedlist_element *LinkedList_AddData(linkedlist *list, void *data)
+bool LinkedList_AddData(linkedlist *list, void *data)
 {
-	linkedlist_element *ret;
+	bool ret = false;
+	linkedlist_element *newElement;
 	
 	if (list != NULL && data != NULL)
 	{
-		if ((ret = (linkedlist_element *)malloc(sizeof(linkedlist_element))) != NULL)
+		if ((newElement = (linkedlist_element *)malloc(sizeof(linkedlist_element))) != NULL)
 		{
 			// Add data to the element
-			LinkedList_InitializeElementByData(ret, data);
+			LinkedList_InitializeElementByData(newElement, data);
 			
 			// Add element to the list
 			if (list->lastElement == NULL)
 			{
 				// This element is the first in the list
-				list->firstElement = ret;
-				list->lastElement = ret;
+				list->firstElement = newElement;
+				list->lastElement = newElement;
 			}
 			else
 			{
 				// Append the element to the end of the chain
-				ret->previous = list->lastElement;
-				list->lastElement->next = ret;
-				list->lastElement = ret;
+				newElement->previous = list->lastElement;
+				list->lastElement->next = newElement;
+				list->lastElement = newElement;
 			}
 			
 			list->count += 1;
+			ret = true;
 		}
 	}
-	
+
 	return ret;
 }
 
@@ -72,7 +75,7 @@ void LinkedList_RemoveByIndex(linkedlist *list, int index)
 	
 	if ((element = LinkedList_GetElementByIndex(list, index)) != NULL)
 	{
-		LinkedList_RemoveElement(list, index);
+		LinkedList_RemoveElement(list, element);
 	}
 }
 
@@ -97,13 +100,17 @@ void *LinkedList_GetDataByIndex(linkedlist *list, int index)
 	return ret;
 }
 
+/*******************
+* Static functions
+********************/
+
 /*
 * Initializes a list as an empty one with known datasize
 *
 * list: address of the list to initialize
 * size: data size of the future element
 */
-void LinkedList_InitializeBySize(linkedlist *list, int size)
+static void LinkedList_InitializeWithSize(linkedlist *list, int size)
 {
 	if (list != NULL)
 	{
@@ -119,7 +126,7 @@ void LinkedList_InitializeBySize(linkedlist *list, int size)
 * element: the address of list element to initialize
 * data: the address of data to initialize with
 */
-void LinkedList_InitializeElementByData(linkedlist_element *element, void *data)
+static void LinkedList_InitializeElementByData(linkedlist_element *element, void *data)
 {
 	if (element != NULL)
 	{
@@ -137,7 +144,7 @@ void LinkedList_InitializeElementByData(linkedlist_element *element, void *data)
 *
 * Returns a pointer to the element residing at given index, or NULL if the list doesn't exists or the index is out of valid range
 */
-linkedlist_element *LinkedList_GetElementByIndex(linkedlist *list, int index)
+static linkedlist_element *LinkedList_GetElementByIndex(linkedlist *list, int index)
 {
 	linkedlist_element *ret = NULL;
 	
@@ -157,8 +164,6 @@ linkedlist_element *LinkedList_GetElementByIndex(linkedlist *list, int index)
 					ret = ret->next;
 				}
 			}
-			
-			ret = element;
 		}
 	}
 	
@@ -171,9 +176,9 @@ linkedlist_element *LinkedList_GetElementByIndex(linkedlist *list, int index)
 * list: the list containing the element
 * element: the element to remove
 */
-void LinkedList_RemoveElement(linkedlist *list, linkedlist_element *element)
+static void LinkedList_RemoveElement(linkedlist *list, linkedlist_element *element)
 {
-	if (list != null && element != null)
+	if (list != NULL && element != NULL)
 	{
 		linkedlist_element *nextElement = element->next;
 		linkedlist_element *previousElement = element->previous;
@@ -181,7 +186,7 @@ void LinkedList_RemoveElement(linkedlist *list, linkedlist_element *element)
 		// Detach the front of the element
 		if (previousElement != NULL)
 		{
-			previousElement->next = nextElement
+			previousElement->next = nextElement;
 		}
 		else
 		{
@@ -191,7 +196,7 @@ void LinkedList_RemoveElement(linkedlist *list, linkedlist_element *element)
 		// Detach the tail of the element
 		if (nextElement != NULL)
 		{
-			nextElement->previous = previousElement
+			nextElement->previous = previousElement;
 		}
 		else
 		{

@@ -15,9 +15,11 @@ CC = gcc
 
 # Paths
 BINDIR = ./bin
+BINLIBDIR = ./bin/lib
 HEADERDIR = ./source/header
 LIBDIR = ./source/lib
 LIBHEADERDIR = ./source/lib/header
+LIBOBJDIR = ./bin/lib/obj
 OBJDIR = ./bin/obj
 SOURCEDIR = ./source
 
@@ -26,22 +28,27 @@ FLAGS = -I$(HEADERDIR)
 LIBFLAGS = -I$(LIBHEADERDIR)
 
 # Set of object files for having the possibility to handle them together
-OBJECTS = $(OBJDIR)/main.o $(OBJDIR)/linkedlist.o
+OBJECTS = $(OBJDIR)/main.o
+LIBOBJECTS = $(LIBOBJDIR)/linkedlist.o
+LIBS = $(BINLIBDIR)/liblinkedlist.a
 
 # The main executable. Should be the first "target" to be the default one
-Watering: $(OBJECTS)
-	$(CC) -o $(BINDIR)/watering.exe $(OBJECTS) $(FLAGS)
+Watering: $(OBJECTS) $(LIBS)
+	$(CC) -o $(BINDIR)/watering.exe $(OBJECTS) -L$(BINLIBDIR) -llinkedlist $(FLAGS) $(LIBFLAGS)
 
 # Targets and their recipes --------------------------------------------
 
 $(OBJDIR)/main.o: $(SOURCEDIR)/main.c $(HEADERDIR)/main.h
 	$(CC) -c -o $(OBJDIR)/main.o $(SOURCEDIR)/main.c $(FLAGS)
 
-$(OBJDIR)/linkedlist.o: $(LIBDIR)/linkedlist.c $(LIBHEADERDIR)/linkedlist.h
-	$(CC) -c -o $(OBJDIR)/linkedlist.o $(LIBDIR)/linkedlist.c $(LIBFLAGS)
+$(BINLIBDIR)/liblinkedlist.a: $(LIBOBJDIR)/linkedlist.o
+	ar -cvq $(BINLIBDIR)/liblinkedlist.a  $(LIBOBJDIR)/linkedlist.o
+
+$(LIBOBJDIR)/linkedlist.o: $(LIBDIR)/linkedlist.c $(LIBHEADERDIR)/linkedlist.h
+	$(CC) -c -o $(LIBOBJDIR)/linkedlist.o $(LIBDIR)/linkedlist.c $(LIBFLAGS)
 
 # Recipes without file target ------------------------------------------
 
 # Delete all binaries to force a full (re)compile of all source files next time
 clean:
-	rm $(BINDIR)/watering.exe $(OBJECTS)
+	rm $(BINDIR)/watering.exe $(OBJECTS) $(LIBS) $(LIBOBJECTS)
