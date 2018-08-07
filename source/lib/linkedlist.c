@@ -100,6 +100,40 @@ void *LinkedList_GetDataByIndex(linkedlist *list, int index)
 	return ret;
 }
 
+/*
+* Search for data
+*
+* list: address of the list containing the data
+* comparator: address of function telling which element's data is the winner
+*
+* Returns the address of the first data element field that satisfies the comparator function
+* 		or NULL pointer if none found.
+* Comparator is satisfied when returns true value.
+*/
+void *LinkedList_SearchData(linkedlist *list, bool (*comparator)(void *))
+{
+	void *ret = NULL;
+	linkedlist_element *element;
+
+	if (list != NULL)
+	{
+		element = list->firstElement;
+
+		while (element != NULL)
+		{
+			if ((*comparator)(element))
+			{
+				ret = element->data;
+				break;
+			}
+
+			element = element->next;
+		}
+	}
+
+	return ret;
+}
+
 /*******************
 * Static functions
 ********************/

@@ -46,6 +46,9 @@ void LinkedList_RemoveByIndex(linkedlist *list, int index);
 // Gets the address of data field of the index-th element of the list
 void *LinkedList_GetDataByIndex(linkedlist *list, int index);
 
+// Search for data
+void *LinkedList_SearchData(linkedlist *list, bool (*comparator)(void *));
+
 // Removes an element from the list
 static void LinkedList_RemoveElement(linkedlist *list, linkedlist_element *element);
 
