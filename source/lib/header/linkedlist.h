@@ -1,62 +1,83 @@
-#include <stdbool.h>
+#ifndef LINKEDLIST_INCLUDED
+    #define LINKEDLIST_INCLUDED
 
-/******************
-* Type definitions
-*******************/
+    #include <stdbool.h>
 
-// List element frame
-typedef struct linkedlist_element
-{
-    // Previous element in the chain (NULL means this is the first)
-    struct linkedlist_element *previous;
+    /******************
+    * Macros
+    *******************/
+    #define LINKEDLIST_LASTERROR_EMPTY (linkedlist_lastError.errorCode == NULL && linkedlist_lastError.errorMessage == NULL)
+    
+    /******************
+    * Type definitions
+    *******************/
 
-    // Next element in the chain (NULL means this is the last)
-    struct linkedlist_element *next;
+    // List element frame
+    typedef struct linkedlist_element
+    {
+        // Previous element in the chain (NULL means this is the first)
+        struct linkedlist_element *previous;
 
-    // Data element
-    void *data;
-} linkedlist_element;
+        // Next element in the chain (NULL means this is the last)
+        struct linkedlist_element *next;
 
-// List "class"
-typedef struct linkedlist
-{
-    // Number of contained elements
-    int count;
+        // Data element
+        void *data;
+    } linkedlist_element;
 
-    // Size of one contained data element
-    int dataSize;
+    // List "class"
+    typedef struct linkedlist
+    {
+        // Number of contained elements
+        int count;
 
-    // First element of the chain (null when the list is empty); for inner use only
-    linkedlist_element *firstElement;
+        // Size of one contained data element
+        int dataSize;
 
-    // Last element of the chain (null when the list is empty); for inner use only
-    linkedlist_element *lastElement;
-} linkedlist;
+        // First element of the chain (null when the list is empty); for inner use only
+        linkedlist_element *firstElement;
 
-/***********************
-* Function declarations
-************************/
+        // Last element of the chain (null when the list is empty); for inner use only
+        linkedlist_element *lastElement;
+    } linkedlist;
 
-// Creates a new, empty list having data members of the given size
-bool LinkedList_AddData(linkedlist *list, void *data);
+    struct linkedlist_error
+    {
+        char *errorCode;
+        char *errorMessage;
+    };
 
-// Removes an element from the list identified by its index
-void LinkedList_RemoveByIndex(linkedlist *list, int index);
+    /***********************
+    * Constants
+    ************************/
+    
+    
 
-// Gets the address of data field of the index-th element of the list
-void *LinkedList_GetDataByIndex(linkedlist *list, int index);
+    /***********************
+    * Function declarations
+    ************************/
 
-// Search for data
-void *LinkedList_SearchData(linkedlist *list, bool (*comparator)(void *));
+    // Creates a new, empty list having data members of the given size
+    linkedlist *LinkedList_CreateSized(int size);
 
-// Removes an element from the list
-static void LinkedList_RemoveElement(linkedlist *list, linkedlist_element *element);
+    // Creates and adds a new element to a list, initialized with given data
+    bool LinkedList_AddData(linkedlist *list, void *data);
 
-// Initializes a list as an empty one with known datasize
-static void LinkedList_InitializeWithSize(linkedlist *list, int size);
+    // Removes an element from the list identified by its index
+    void LinkedList_RemoveByIndex(linkedlist *list, int index);
 
-// Initializes data part of a wannabe list element
-static void LinkedList_InitializeElementByData(linkedlist_element *element, void *data);
+    // Gets the address of data field of the index-th element of the list
+    void *LinkedList_GetDataByIndex(linkedlist *list, int index);
 
-// Gets the index-th element of the list (indexing starts at 0)
-static linkedlist_element *LinkedList_GetElementByIndex(linkedlist *list, int index);
+    // Search for data
+    void *LinkedList_SearchData(linkedlist *list, bool (*comparator)(void *));
+
+    // Removes and free all elements (with data) of a list
+    bool LinkedList_Clear(linkedlist *list);
+
+    // Free all elements with data of the list and also the list itself
+    bool LinkedList_Free(linkedlist *list);
+
+    // Gives the details of the last error
+    void LinkedList_GetLastError(struct linkedlist_error *pError);
+#endif /* !LINKEDLIST_INCLUDED */
