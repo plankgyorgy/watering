@@ -26,21 +26,40 @@ extern "C"
     * Type definitions
     *******************/
     
-    typedef struct dataset_head
+    typedef struct dataset_header
     {
         dataset_head *previous;
         dataset_head *next;
-    } dataset_head;
+    } dataset_header;
     
     /******************
     * Macros
     *******************/
     
+	#define PickElement(knownElement, type, headerField, searchedField, searchValue) \
+		({                                                                           \
+			type *currentElement = container_of(knownElement, type, headerField);    \
+			do                                                                       \
+			{                                                                        \
+				if (currentElement->searchedField == searchValue)                    \
+				{                                                                    \
+					
+				}                                                                    \
+				                                                                     \
+				currentElement = currentElement->next;                               \
+			} while (currentElement->next != knownElement->next)                     \
+		})
     
     
     /***********************
     * Function declarations
     ************************/
+	
+	// Adds a new element to the set
+	bool AddElement(dataset_header *knownElement, dataset_header *newElement);
+	
+	// Removes an element from the set
+	bool RemoveElement(dataset_header *element);
 
 #ifdef __cplusplus
 }
