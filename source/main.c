@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "main.h"
+#include "lib/header/singleset.h"
 
 int main(int argc, char **argv)
 {
@@ -11,7 +12,7 @@ int main(int argc, char **argv)
 
     if (!ProcessBlockingArgs(argc, argv, &returnCode))
     {
-
+        singleset_tests();
     }
     
     return returnCode;
