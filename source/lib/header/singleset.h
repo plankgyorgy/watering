@@ -50,9 +50,8 @@ extern "C"
      * @param knownElement
      * @param newElement
      * @return One element when found, NULL when not found
-     */
-    
-    #define PickElement(knownElement, type, headerField, searchedField, searchValue)     \
+     */    
+    #define singleset_PickElement(knownElement, type, headerField, searchedField, searchValue)     \
             ({                                                                           \
                 type *currentElement = container_of(knownElement, type, headerField);    \
                 do                                                                       \
@@ -76,13 +75,13 @@ extern "C"
      ************************/
 
     // Adds a new element to the set
-    bool AddElement(singleset_header *knownElement, singleset_header *newElement);
+    bool singleset_AddElement(singleset_header *knownElement, singleset_header *newElement);
 
     // Removes an element from the set
-    bool RemoveElement(singleset_header *element);
+    bool singleset_RemoveElement(singleset_header *element);
 
     // Wether the set contains exactly one element
-    bool IsLone(singleset_header *knownElement);
+    bool singleset_IsLone(singleset_header *knownElement);
 
     // Testing the functionalities of the whole singleset stuff
     int singleset_tests();

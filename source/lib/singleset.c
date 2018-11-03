@@ -12,7 +12,7 @@
  *
  * If newElement is going to be the first one, there can't be known element, so it should be NULL.
  */
-bool AddElement(singleset_header *knownElement, singleset_header *newElement)
+bool singleset_AddElement(singleset_header *knownElement, singleset_header *newElement)
 {
     bool ret = false;
 
@@ -43,7 +43,7 @@ bool AddElement(singleset_header *knownElement, singleset_header *newElement)
  *
  * Set will be dereferenced in the removed header but neither the header nor its container will be changed (even not freed) any other way.
  */
-bool RemoveElement(singleset_header *element)
+bool singleset_RemoveElement(singleset_header *element)
 {
     bool ret = false;
 
@@ -61,7 +61,7 @@ bool RemoveElement(singleset_header *element)
  * 
  * @param knownElement Address of a set header of a known member
  */
-bool IsLone(singleset_header *knownElement)
+bool singleset_IsLone(singleset_header *knownElement)
 {
     return knownElement->next == knownElement && knownElement->previous == knownElement;
 }
@@ -103,11 +103,11 @@ int singleset_tests()
            testData[0].lastName,
            testData[0].firstName,
            testData[0].age);
-    if (AddElement(NULL, &testData[0].listheader))
+    if (singleset_AddElement(NULL, &testData[0].listheader))
     {
         printf("Set created.\n");
         
-        if (IsLone(&testData[0].listheader))
+        if (singleset_IsLone(&testData[0].listheader))
         {
             printf("Set is lone now.\n");
         }
@@ -128,11 +128,11 @@ int singleset_tests()
                    testData[i].lastName,
                    testData[i].firstName,
                    testData[i].age);
-            if (AddElement(&testData[0].listheader, &testData[i].listheader))
+            if (singleset_AddElement(&testData[0].listheader, &testData[i].listheader))
             {
                 printf("Element added.\n");
                 
-                if (!IsLone(&testData[i - 1].listheader))
+                if (!singleset_IsLone(&testData[i - 1].listheader))
                 {
                     printf("Set is not lone now.\n");
                 }
@@ -155,7 +155,7 @@ int singleset_tests()
         {
             printf("Picking an element by the value of a field.\n");
             singleset_header *testptr = &(testData[2].listheader);
-            struct teststruct *pickedElement = PickElement(testptr, struct teststruct, listheader, age, 17);
+            struct teststruct *pickedElement = singleset_PickElement(testptr, struct teststruct, listheader, age, 17);
             if (pickedElement == NULL)
             {
                 printf("No element found");
