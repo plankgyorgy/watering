@@ -153,52 +153,18 @@ int singleset_tests()
         
         if (returnCode == EXIT_SUCCESS)
         {
-            printf("Picking element other than the \"known\" one.\n");
-            struct teststruct* foundElement = NULL;
-            /*
-            struct teststruct* currentElement = &(testData[0]);
-            
-            do
+            printf("Picking an element by the value of a field.\n");
+            singleset_header *testptr = &(testData[2].listheader);
+            struct teststruct *pickedElement = PickElement(testptr, struct teststruct, listheader, age, 17);
+            if (pickedElement == NULL)
             {
-                if (currentElement->age == 17)
-                {
-                    foundElement = currentElement;
-                    break;
-                }
-                else
-                {
-                    printf("Found age: %d\n", currentElement->age);
-                }
-                
-                currentElement = container_of((currentElement->listheader.next), struct teststruct, listheader);
-            } while (currentElement != &(testData[0]));
-            */
-            struct teststruct* currentContainer;
-            foreach(&(testData[1].listheader))
-            {
-                if((currentContainer = container_of(currentElement, struct teststruct, listheader))->age == 17)
-                {
-                    foundElement = currentContainer;
-                    break;
-                }
-                else
-                {
-                    printf("Found age: %d\n", currentContainer->age);
-                }
-            }
-            
-            if (foundElement != NULL)
-            {
-                printf("Found element matching the search condition: %s, %s\n", foundElement->lastName, foundElement->firstName);
+                printf("No element found");
+                returnCode = EXIT_FAILURE;
             }
             else
             {
-                printf("Not found matching element.\n");
+                printf("Found matching element: %s, %s", pickedElement->lastName, pickedElement->firstName);
             }
-            
-            
-            //singleset_header *testptr = &(testData[0].listheader);
-            //struct teststruct *pickedElement = PickElement(testptr, (struct teststruct), listheader, age, 17);
         }
     }
     else

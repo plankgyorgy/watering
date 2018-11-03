@@ -45,29 +45,16 @@ extern "C"
             (type *)( (char *)__mptr - offsetof(type,member));})
     
     /**
-     * Iterates through the set
-     * 
-     * @param knownElement
-     * @param newElement
-     * 
-     * Won't work properly with a lone set (that contains only one element).
-     * To determine the loneliness of a set use the IsLone() function.
-     */
-    #define foreach(knownElement) for (singleset_header *currentElement = (knownElement)->next; \
-                                    currentElement != (knownElement);                          \
-                                    currentElement = currentElement->next)
-    
-    /**
      * Picks the first element found based on a scalar value of a field
      * 
      * @param knownElement
      * @param newElement
      * @return One element when found, NULL when not found
      */
-    /*
+    
     #define PickElement(knownElement, type, headerField, searchedField, searchValue)     \
             ({                                                                           \
-                (type *) currentElement = container_of((knownElement), (type), headerField);    \
+                type *currentElement = container_of(knownElement, type, headerField);    \
                 do                                                                       \
                 {                                                                        \
                         if (currentElement->searchedField == searchValue)                \
@@ -76,12 +63,12 @@ extern "C"
                         }                                                                \
                                                                                          \
                         currentElement = container_of(currentElement->headerField.next,  \
-                                                      (type),                              \
+                                                      type,                              \
                                                       headerField);                      \
-                } while (currentElement->headerField != (knownElement));        \
-                currentElement->searchedField == (searchValue) ? currentElement : NULL;    \
+                } while (&currentElement->headerField != (knownElement));                \
+                currentElement->searchedField == (searchValue) ? currentElement : NULL;  \
             })
-     */
+
 
 
     /***********************
@@ -96,7 +83,7 @@ extern "C"
 
     // Wether the set contains exactly one element
     bool IsLone(singleset_header *knownElement);
-    
+
     // Testing the functionalities of the whole singleset stuff
     int singleset_tests();
 
@@ -104,5 +91,5 @@ extern "C"
 }
 #endif
 
-#endif /* DATASET_H */
+#endif /* SINGLESET_H */
 
